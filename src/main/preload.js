@@ -1,4 +1,4 @@
-const { contextBridge /*, ipcRenderer */ } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
@@ -21,4 +21,9 @@ contextBridge.exposeInMainWorld('electron', {
   //   },
   // },
   // Add other APIs you want to expose here
+  windowControls: {
+    minimize: () => ipcRenderer.send('window:minimize'),
+    maximize: () => ipcRenderer.send('window:maximize'),
+    close: () => ipcRenderer.send('window:close'),
+  },
 });

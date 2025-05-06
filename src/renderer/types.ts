@@ -8,4 +8,18 @@ export interface Tab {
   canGoBack: boolean;
   canGoForward: boolean;
   favicon?: string;
+  isMuted?: boolean;
+  isPlaying?: boolean;
+  zoomLevel?: number;
+  isPinned?: boolean;
+  lastAccessed?: number;
+}
+
+export type ThemeMode = 'light' | 'dark';
+
+export interface BrowserHistory {
+  url: string;
+  title: string;
+  timestamp: number;
+  favicon?: string;
 }
