@@ -1,0 +1,107 @@
+/* Sidebar specific styling */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: width 0.2s ease-in-out;
+  background-color: #121214;
+}
+
+/* Custom scrollbar for the sidebar */
+.sidebar::-webkit-scrollbar,
+.sidebar *::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.sidebar *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.sidebar *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.sidebar *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Arc browser-like button styles */
+.sidebar button {
+  transition: all 0.2s ease;
+}
+
+.sidebar button:active {
+  transform: scale(0.95);
+}
+
+/* Animation for the add button */
+@keyframes gentle-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Custom scrollbar for the tab list area */
+.tabs-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+/* Tab item hover effects */
+.tab-item {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.tab-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.tab-item:hover::after {
+  opacity: 1;
+}
+
+/* Add Tab button pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.add-tab-btn:hover {
+  animation: pulse 1.5s infinite;
+}
