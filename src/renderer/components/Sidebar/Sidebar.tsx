@@ -1,12 +1,25 @@
 import React, { useMemo } from 'react';
 import './Sidebar.css';
+import TabList from './TabList';
 
 const Sidebar: React.FC<any> = ({
+  tabs = [],
+  activeTabId = '',
   isCollapsed = false,
+  onNewTab,
+  onTabClick,
+  onRemoveTab,
+  onBack,
+  onForward,
+  onReload,
+  url = '',
+  onUrlClick,
+  onCopyLink,
+  onShowInfo,
+  urlLoadingBar,
 }) => {
   const sidebarColor = 'rgb(255, 132, 138)';
   const textColor = 'rgb(137,69,70)';
-  const activeTabColor = 'rgb(255,245,244)';
   
   const darkerBgColor = useMemo(() => {
     const rgbaMatch = sidebarColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/);
@@ -38,17 +51,17 @@ const Sidebar: React.FC<any> = ({
             <button className="w-4 h-4 rounded-full bg-[#00ca4e]" aria-label="Maximize"></button>
           </div> */}
           <div className="flex space-x-1">
-            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }}>
+            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }} onClick={onBack}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
-            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }}>
+            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }} onClick={onForward}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />
               </svg>
             </button>
-            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }}>
+            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }} onClick={onReload}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
@@ -58,20 +71,34 @@ const Sidebar: React.FC<any> = ({
       </div>
 
       <div className="px-3 pt-0 pb-2">
-        <div className="flex items-center rounded-xl px-3 py-2 " style={{ backgroundColor: darkerBgColor }}>
-          <span className="text-sm font-medium" style={{ color: textColor }}>mminhome.io</span>
+        <div className="flex items-center rounded-xl px-3 py-2 relative" style={{ backgroundColor: darkerBgColor }}>
+          <span
+            className="text-sm font-medium truncate cursor-pointer"
+            style={{ color: textColor, maxWidth: isCollapsed ? 0 : 120, flex: 1 }}
+            title={url}
+            onClick={onUrlClick}
+          >
+            {url}
+          </span>
           <div className="ml-auto flex space-x-2">
-            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+            {/* Copy Link */}
+            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }} onClick={onCopyLink} title="Copy Link">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                <rect x="7" y="7" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <rect x="4" y="4" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
               </svg>
             </button>
-            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clipRule="evenodd" />
+            {/* Info */}
+            <button className="p-1 rounded-full hover:bg-white/10" style={{ color: textColor }} onClick={onShowInfo} title="Tab Info">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <rect x="9" y="8" width="2" height="5" rx="1" fill="currentColor"/>
+                <rect x="9" y="5" width="2" height="2" rx="1" fill="currentColor"/>
               </svg>
             </button>
           </div>
+          {/* Animated loading bar */}
+          {urlLoadingBar}
         </div>
       </div>
 
@@ -104,42 +131,17 @@ const Sidebar: React.FC<any> = ({
           </button>
         </div>
         
-        <button 
-          className="flex items-center px-3 py-2 w-full rounded-lg transition-colors mb-2 hover:bg-white/10"
-          style={{ color: textColor }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          <span className="text-sm font-medium">New Tab</span>
-        </button>
-        
-        <div className="rounded-lg flex items-center px-3 py-2 mb-1 group" style={{ backgroundColor: activeTabColor }}>
-          <div className="w-6 h-6 bg-neutral-700 flex items-center justify-center rounded-sm mr-2.5 flex-shrink-0">
-            <span className="text-sm font-bold text-white">M</span>
-          </div>
-          <span className="text-sm font-medium flex-1 truncate" style={{ color: textColor }}>MMMHome</span>
-          
-          <button className="opacity-0 hover:opacity-100 p-1 rounded-full text-black/60 hover:bg-black/10 hover:text-black/80 group-hover:opacity-100">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </button>
-        </div>
-        
-        <div className="rounded-lg flex items-center px-3 py-2 mb-1 group hover:bg-opacity-90 transition-colors" style={{ backgroundColor: darkerBgColor }}>
-          <div className="w-6 h-6 bg-blue-600 flex items-center justify-center rounded-sm mr-2.5 flex-shrink-0">
-            <span className="text-sm font-bold text-white">G</span>
-          </div>
-          <span className="text-sm font-medium flex-1 truncate" style={{ color: textColor }}>GitHub</span>
-          
-          <button className="opacity-0 hover:opacity-100 p-1 rounded-full text-white/60 hover:bg-white/10 hover:text-white/80 group-hover:opacity-100">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </button>
-        </div>
+
       </div>
+
+      <TabList
+        tabs={tabs}
+        activeTabId={activeTabId}
+        isCollapsed={isCollapsed}
+        onNewTab={onNewTab}
+        onTabClick={onTabClick}
+        onRemoveTab={onRemoveTab}
+      />
 
       <div className="mt-auto"></div>
       

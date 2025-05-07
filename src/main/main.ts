@@ -46,7 +46,6 @@ const createWindow = async () => {
     await installExtensions();
   }
 
-  // Remove the default Electron menu
   Menu.setApplicationMenu(null);
 
   const RESOURCES_PATH = app.isPackaged
@@ -63,7 +62,6 @@ const createWindow = async () => {
     height: 800,
     minWidth: 840,
     minHeight: 600,
-    // Use a frameless window for a custom header
     frame: false,
     titleBarStyle: 'hidden',
     backgroundColor: '#18181b',
